@@ -1,0 +1,22 @@
+---
+import { getPreviewPageBySlug } from "../../sanity/fetch";
+import Content from "../../components/Content.astro";
+
+// Validate authParam
+const auth = Astro.url.searchParams.get("auth");
+const authSecret = "ASkakjsdoajsdoi"; // append this to the sanity preview route ( /?auth=secret )
+if (auth !== authSecret) {
+    return Astro.redirect("/");
+}
+
+// Fetch data & data == null redirect 404s
+const { slug } = Astro.params;
+const data = await getPreviewPageBySlug(slug);
+if (!data) {
+    return new Response(null, {
+        status: 404,
+    });
+}
+---
+
+<Content data={data} />

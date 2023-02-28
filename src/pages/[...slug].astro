@@ -1,0 +1,19 @@
+---
+export const prerender = true; // For static generation
+import { getPages } from "../sanity/fetch";
+import Content from "../components/Content.astro";
+
+export async function getStaticPaths() {
+    const pages = await getPages();
+
+    return pages.map((page) => {
+        return {
+            params: { slug: page.slug },
+            props: { data: page },
+        };
+    });
+}
+const { data } = Astro.props;
+---
+
+<Content data={data} />
